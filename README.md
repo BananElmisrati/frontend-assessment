@@ -10,6 +10,14 @@ Your task is to build a **"Team Directory"** feature that displays a **paginated
 
 ---
 
+## Design Guidelines
+
+> **Note:** There is no Figma or design mockup provided.  
+> **You** are responsible for implementing the **look and feel** of the feature.  
+> Focus on creating a **clean, responsive, and user-friendly UI** using your judgment, while following the functional requirements outlined in this assessment.
+
+---
+
 ## Repository Setup
 
 1. **Fork this repository** to your own GitHub account.  
@@ -86,7 +94,7 @@ Include actions for:
   - **Filtering** by search term and role  
   - **Custom cell rendering** (e.g., avatar image, role badge)  
 - Must remain **responsive**:
-  - Horizontal scroll on small screens OR stacked card view  
+  - Horizontal scroll on small screens
 
 ### TeamGrid (Optional)
 
@@ -97,8 +105,6 @@ Include actions for:
   - 3 columns (desktop)  
 - Shows loading skeletons while fetching  
 - Empty state when no results  
-
-> Candidate may choose to implement **grid, table, or both**.
 
 ---
 
