@@ -1,52 +1,48 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import debounce from "lodash.debounce";
-import { useTeamStore } from "@/store/teamStore";
+import { ChangeEvent } from "react";
+import { useTeamStore } from "@/store/useTeamStore";
 
 export default function TeamFilters() {
   const { filters, updateFilters, clearFilters } = useTeamStore();
-  const [search, setSearch] = useState(filters.searchTerm);
 
-  const debouncedUpdate = useMemo(
-    () =>
-      debounce((value: string) => {
-        updateFilters({ searchTerm: value });
-      }, 300),
-    [updateFilters]
-  );
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    updateFilters({ searchTerm: e.target.value });
+  };
 
-  useEffect(() => {
-    debouncedUpdate(search);
-    return () => debouncedUpdate.cancel();
-  }, [search, debouncedUpdate]);
+  const handleRoleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    updateFilters({ role: e.target.value });
+  };
 
   return (
-    <div className="flex flex-wrap gap-3 items-center text-black">
+    <div className="flex flex-wrap gap-4 items-center">
+      {/* Search */}
       <input
         type="text"
+        value={filters.searchTerm}
+        onChange={handleNameChange}
         placeholder="Search by name..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="border rounded p-2 flex-1 min-w-[160px]"
+        className="border p-2 rounded"
       />
 
+      {/* Role Dropdown */}
       <select
         value={filters.role}
-        onChange={(e) => updateFilters({ role: e.target.value })}
-        className="border rounded p-2"
+        onChange={handleRoleChange}
+        className="border p-2 rounded"
       >
         <option value="">All Roles</option>
-        <option value="Frontend">Frontend</option>
-        <option value="Backend">Backend</option>
-        <option value="Fullstack">Fullstack</option>
+        <option value="Frontend Engineer">Frontend Engineer</option>
+        <option value="Backend Developer">Backend Developer</option>
+        <option value="UI/UX Designer">UI/UX Designer</option>
       </select>
 
+      {/* Clear Filters Button */}
       <button
         onClick={clearFilters}
-        className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+        className="px-4 py-2 border rounded bg-gray-200 hover:bg-gray-300"
       >
-        Clear
+        Clear Filters
       </button>
     </div>
   );

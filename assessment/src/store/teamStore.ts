@@ -16,6 +16,10 @@ interface Filters {
 interface TeamStore {
   teamMembers: TeamMember[];
   filters: Filters;
+
+  loading: boolean;                     // 👈 NEW
+  setLoading: (value: boolean) => void; // 👈 NEW
+
   setTeamMembers: (members: TeamMember[]) => void;
   updateFilters: (filters: Partial<Filters>) => void;
   clearFilters: () => void;
@@ -24,6 +28,9 @@ interface TeamStore {
 export const useTeamStore = create<TeamStore>((set) => ({
   teamMembers: [],
   filters: { role: "", searchTerm: "" },
+
+  loading: false,                               // 👈 NEW DEFAULT
+  setLoading: (value) => set({ loading: value }), // 👈 NEW ACTION
 
   setTeamMembers: (members) => set({ teamMembers: members }),
 

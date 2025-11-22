@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+
+import React, { useMemo, useState } from "react";
 import {
   ColumnDef,
   flexRender,
@@ -11,42 +12,24 @@ import {
   PaginationState,
 } from "@tanstack/react-table";
 import Image from "next/image";
-import { useTeamStore, TeamMember } from "@/store/teamStore";
+import { useTeamStore } from "@/store/useTeamStore";
+import { useTeamMembers, TeamMember } from "..//hooks/useTeamMembers";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default function TeamTable() {
-  const { teamMembers, filters } = useTeamStore();
+  const { filters } = useTeamStore();
 
-  // Strictly typed state
+  // Fetch filtered members using the mock API
+  const { data, loading, error } = useTeamMembers(filters);
+
+  // Table sorting & pagination states
   const [sorting, setSorting] = useState<SortingState>([]);
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 2,
   });
 
-  // Filter data (based on Zustand filters)
-  const filteredData = useMemo(() => {
-    return teamMembers.filter((member) => {
-      const matchesSearch =
-        filters.searchTerm.trim() === "" ||
-        member.name.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
-        member.email.toLowerCase().includes(filters.searchTerm.toLowerCase());
-
-      const matchesRole =
-        filters.role === "" ||
-        member.role.toLowerCase().includes(filters.role.toLowerCase());
-
-      return matchesSearch && matchesRole;
-    });
-  }, [teamMembers, filters]);
-
-  useEffect(() => {
-    setPagination((prev) => ({
-      ...prev,
-      pageIndex: 0,
-    }));
-  }, [filters]);
-
-  // Strict column definitions
+  // Columns (strict typing)
   const columns = useMemo<ColumnDef<TeamMember>[]>(
     () => [
       {
@@ -90,8 +73,9 @@ export default function TeamTable() {
     []
   );
 
+  // Initialize React Table
   const table = useReactTable({
-    data: filteredData,
+    data,
     columns,
     state: {
       sorting,
@@ -104,7 +88,11 @@ export default function TeamTable() {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  if (!filteredData.length) return <p className=" text-black ">No results found</p>;
+  // ──────────────────────────────── RENDER SECTION ────────────────────────────────
+
+  if (loading) return <LoadingSpinner />;
+  if (error) return <p className="text-red-500">Error: {error.message}</p>;
+  if (!data.length) return <p className="text-black">No results found</p>;
 
   return (
     <div className="overflow-x-auto text-black">
@@ -113,7 +101,7 @@ export default function TeamTable() {
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
-                const sorted = header.column.getIsSorted(); // "asc" | "desc" | false
+                const sorted = header.column.getIsSorted();
 
                 return (
                   <th
@@ -123,7 +111,11 @@ export default function TeamTable() {
                   >
                     <div className="flex items-center gap-1">
                       {flexRender(header.column.columnDef.header, header.getContext())}
-                      {sorted === "asc" ? "▲" : sorted === "desc" ? "▼" : ""}
+                      {sorted === "asc"
+                        ? "▲"
+                        : sorted === "desc"
+                        ? "▼"
+                        : ""}
                     </div>
                   </th>
                 );
