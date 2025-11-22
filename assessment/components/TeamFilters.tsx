@@ -15,7 +15,7 @@ export default function TeamFilters() {
   };
 
   return (
-    <div className="flex flex-wrap gap-4 items-center">
+    <div className="flex flex-wrap gap-4 items-center text-black">
       {/* Search */}
       <input
         type="text"
@@ -37,10 +37,9 @@ export default function TeamFilters() {
         <option value="UI/UX Designer">UI/UX Designer</option>
       </select>
 
-      {/* Clear Filters Button */}
       <button
         onClick={clearFilters}
-        className="px-4 py-2 border rounded bg-gray-200 hover:bg-gray-300"
+        className="px-4 py-2 border rounded bg-[#FF5F1F] hover:bg-black text-white"
       >
         Clear Filters
       </button>
