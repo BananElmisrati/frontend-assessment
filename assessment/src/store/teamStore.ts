@@ -17,8 +17,8 @@ interface TeamStore {
   teamMembers: TeamMember[];
   filters: Filters;
 
-  loading: boolean;                     // 👈 NEW
-  setLoading: (value: boolean) => void; // 👈 NEW
+  loading: boolean;                     
+  setLoading: (value: boolean) => void; 
 
   setTeamMembers: (members: TeamMember[]) => void;
   updateFilters: (filters: Partial<Filters>) => void;
@@ -29,8 +29,8 @@ export const useTeamStore = create<TeamStore>((set) => ({
   teamMembers: [],
   filters: { role: "", searchTerm: "" },
 
-  loading: false,                               // 👈 NEW DEFAULT
-  setLoading: (value) => set({ loading: value }), // 👈 NEW ACTION
+  loading: false,                               
+  setLoading: (value) => set({ loading: value }),
 
   setTeamMembers: (members) => set({ teamMembers: members }),
 

@@ -20,7 +20,6 @@ export const useTeamMembers = (filters: FilterInput) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
-  // Mock dataset (as if returned from GraphQL)
   const MOCK_MEMBERS: TeamMember[] = [
     {
       id: "1",
@@ -51,7 +50,6 @@ export const useTeamMembers = (filters: FilterInput) => {
         setLoading(true);
         setError(null);
 
-        // Simulate network latency
         await new Promise<void>((res) => setTimeout(res, 1000));
 
         const filtered = MOCK_MEMBERS.filter((m) => {

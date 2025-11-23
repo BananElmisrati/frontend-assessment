@@ -16,7 +16,6 @@ export default function TeamFilters() {
 
   return (
     <div className="flex flex-wrap gap-4 items-center text-black">
-      {/* Search */}
       <input
         type="text"
         value={filters.searchTerm}
@@ -25,7 +24,6 @@ export default function TeamFilters() {
         className="border p-2 rounded"
       />
 
-      {/* Role Dropdown */}
       <select
         value={filters.role}
         onChange={handleRoleChange}
