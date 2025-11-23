@@ -3,13 +3,15 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useTeamStore } from "@/store/useTeamStore";
-import TeamFilters from "../../../components/TeamFilters";
-import TeamTable from "../../../components/TeamTable";
-import { useTeamMembers } from "../../../hooks/useTeamMembers";
-import TeamMembersCard from "../../../components/TeamMembersCard";
-import LoadingSpinner from "../../../components/LoadingSpinner";
+import TeamFilters from "../../../../components/TeamFilters";
+import TeamTable from "../../../../components/TeamTable";
+import { useTeamMembers } from "../../../../hooks/useTeamMembers";
+import TeamMembersCard from "../../../../components/TeamMembersCard";
+import LoadingSpinner from "../../../../components/LoadingSpinner";
+import { useTranslations } from "next-intl";
 
 export default function TeamDir() {
+  const t = useTranslations();
   const searchParams = useSearchParams();
   const router = useRouter();
   const { filters, setFilters } = useTeamStore();
@@ -32,14 +34,17 @@ export default function TeamDir() {
     router.replace(`?${params.toString()}`);
   }, [filters]);
 
-  const { data, loading, error } = useTeamMembers(filters);
-  if (loading) return <LoadingSpinner></LoadingSpinner>
+  const { data, loading } = useTeamMembers(filters);
+  if (loading) return <LoadingSpinner />;
+
   return (
     <main className="p-6 space-y-6">
-      <h1 className="text-xl font-semibold text-black">Team Directory</h1>
-      <TeamFilters />
+      <h1 className="text-xl font-semibold text-black">
+        {t("team_directory")}
+      </h1>
 
-      <TeamMembersCard data={data}></TeamMembersCard>
+      <TeamFilters />
+      <TeamMembersCard data={data} />
       <TeamTable />
     </main>
   );
